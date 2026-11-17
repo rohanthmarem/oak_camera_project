@@ -1,71 +1,38 @@
-# 🥊 OAK Boxing Trainer
+# Coach Bob
 
-A first-person boxing game using OAK-1 AF camera with pose detection, ESP32 health management, and immersive audio.
+An AR warm-up game for combat sports. Put on the AR glasses and helmet, and Coach Bob tells you which strike to throw next while shouting playful insults to get you moving.
 
-## Features
+<p align="center">
+  <img src="assets/demo.jpg" alt="Coach Bob demo on stage" height="340">
+  <img src="assets/bob.jpg" alt="Bob the training dummy and its IMU" height="340">
+</p>
 
--   **Real-time pose detection** using MediaPipe and OAK-1 AF camera
--   **Smart hit zones** that reposition automatically when health changes from any source
--   **ESP32 health system** with remote health monitoring and setting
--   **Campaign mode** with boss battles and cutscenes
--   **Background music** with volume controls
--   **Fullscreen support** for immersive gaming
+**Devpost:** https://devpost.com/software/coach-bob
 
-## Hit Zone System
+## What it does
 
-The game features an intelligent hit zone system that:
+- Lights up targets on Bob, the training dummy, through the AR glasses: kick, knee, hook, jab, or straight, to the head or body
+- Coach Bob talks to you while you warm up
+- Senses each hit from how Bob wobbles after impact
+- Shows speed, force, and time on a dashboard afterwards
 
--   **Repositions dynamically** - Hit zones move to new random positions whenever health changes
--   **Multi-source health tracking** - Responds to health changes from both in-game hits and ESP32 external damage
--   **Visual feedback** - Square hit zones with pulsing effects and color coding
--   **Combo system** - Rewards consecutive hits with score multipliers
+## How it works
 
-## Controls
+- **XReal glasses:** show the targets, placed with OpenCV
+- **OAK-1 AF camera:** first-person video from the helmet
+- **Gemini and ElevenLabs:** write and voice Coach Bob's lines
+- **MPU-6050 on an ESP32:** registers hits and measures their force
 
--   `q` - Quit game
--   `r` - Reset current boss
--   `c` - Reset entire campaign
--   `f` - Toggle fullscreen
--   `+` - Increase music volume
--   `-` - Decrease music volume
--   `m` - Toggle music on/off
--   `ESC` - Exit fullscreen
+## Tech
 
-## Setup
+depthai, mediapipe, opencv, gemini, elevenlabs
 
-1. Install dependencies:
+## Structure
 
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-2. Connect OAK-1 AF camera
-
-3. Set up ESP32 (optional) - see ESP32_INTEGRATION.md
-
-4. Run the game:
-
-    ```bash
-    python oak_cam.py
-    ```
-
-## Music
-
-The game includes background music (`music/bg_theme.mp3`) that:
-
--   Plays automatically when the game starts
--   Loops continuously during gameplay
--   Can be controlled with keyboard shortcuts
--   Runs at 30% volume by default for non-intrusive gameplay
-
-## ESP32 Integration
-
-See `ESP32_INTEGRATION.md` for details on setting up the ESP32 health management system.
-
-## Testing
-
--   `test_music.py` - Test background music functionality
--   `test_esp32.py` - Test ESP32 API connectivity
--   `test_boss_advancement.py` - Test boss/campaign logic
--   `test_video.py` - Test cutscene video compatibility
--   `test_cutscene_manual.py` - Manual cutscene testing
+```
+oak_cam.py           game loop: camera, pose detection, targets
+campaign.json        boss order and stats
+cutscenes/           boss intro videos
+fetch_damage.py      reads hits and health from the ESP32
+esp32_simulator.py   fakes the ESP32 for testing
+```
